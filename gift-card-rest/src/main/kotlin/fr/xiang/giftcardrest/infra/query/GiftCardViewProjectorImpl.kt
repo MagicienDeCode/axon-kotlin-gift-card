@@ -6,6 +6,7 @@ import fr.xiang.giftcardrest.domain.command.GiftCard
 import fr.xiang.giftcardrest.domain.query.GiftCardViewProjector
 import org.axonframework.modelling.command.Repository
 import org.axonframework.queryhandling.QueryHandler
+import org.springframework.context.annotation.Lazy
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Service
 import java.util.concurrent.CompletableFuture
@@ -13,7 +14,7 @@ import java.util.concurrent.CompletableFuture
 @Profile("query")
 @Service
 class GiftCardViewProjectorImpl(
-    val giftCardRepository: Repository<GiftCard>
+    @Lazy val giftCardRepository: Repository<GiftCard>
 ) : GiftCardViewProjector {
 
     @QueryHandler
