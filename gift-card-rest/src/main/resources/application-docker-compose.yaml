@@ -1,0 +1,6 @@
+server:
+  port: 11000
+
+axon:
+  axonserver:
+    servers: axon-framework:8124
