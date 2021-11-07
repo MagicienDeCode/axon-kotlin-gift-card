@@ -8,8 +8,10 @@ import fr.xiang.giftcardapi.event.IssuedEvent
 import fr.xiang.giftcardapi.event.RedeemEvent
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.eventsourcing.EventSourcingHandler
+import org.axonframework.extensions.kotlin.applyEvent
+import org.axonframework.modelling.command.AggregateCreationPolicy
 import org.axonframework.modelling.command.AggregateIdentifier
-import org.axonframework.modelling.command.AggregateLifecycle
+import org.axonframework.modelling.command.CreationPolicy
 import org.axonframework.spring.stereotype.Aggregate
 import org.springframework.context.annotation.Profile
 import kotlin.properties.Delegates
@@ -25,16 +27,18 @@ class GiftCard {
     constructor()
 
     @CommandHandler
-    constructor(issueCommand: IssueCommand) {
+    @CreationPolicy(AggregateCreationPolicy.ALWAYS)
+    fun handle(issueCommand: IssueCommand): String {
         if (issueCommand.amount <= 0) {
             throw RuntimeException("issueCommand amount <= 0")
         }
-        AggregateLifecycle.apply(IssuedEvent(issueCommand.id, issueCommand.amount))
+        applyEvent(IssuedEvent(issueCommand.id, issueCommand.amount))
+        return "OK TEST"
     }
 
     @CommandHandler
     fun handle(cancelCommand: CancelCommand) {
-        AggregateLifecycle.apply(CancelEvent(cancelCommand.id))
+        applyEvent(CancelEvent(cancelCommand.id))
     }
 
     @CommandHandler
@@ -45,7 +49,7 @@ class GiftCard {
         if (redeemCommand.amount > this.amount) {
             throw RuntimeException("redeemCommand amount > remaining amount")
         }
-        AggregateLifecycle.apply(RedeemEvent(redeemCommand.id, redeemCommand.amount))
+        applyEvent(RedeemEvent(redeemCommand.id, redeemCommand.amount))
     }
 
     @EventSourcingHandler

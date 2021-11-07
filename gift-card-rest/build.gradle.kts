@@ -8,6 +8,7 @@ plugins {
 
 dependencies {
     implementation(project(":gift-card-api"))
+    implementation("org.axonframework.extensions.kotlin:axon-kotlin:0.2.0")
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
